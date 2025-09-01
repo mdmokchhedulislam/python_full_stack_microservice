@@ -1,18 +1,24 @@
+
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
+  namespace: production
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
+
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: production
 spec:
   replicas: 1
   selector:
@@ -42,11 +48,14 @@ spec:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pvc
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres
+  namespace: production
 spec:
   type: ClusterIP
   selector:
