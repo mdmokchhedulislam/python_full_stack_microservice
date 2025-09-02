@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config
+  namespace: production
+data:
+  DATABASE_NAME: "persondb"
+  DATABASE_USER: "postgres"
+  DATABASE_IP: "127.0.0.1"
+  EMAIL_HOST_USER: "mokchheduls46@gmail.com"
+  SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: "286684475031-0vn8fda5n3a3l5ees9i91qq6hnqho29e.apps.googleusercontent.com"
+  STRIPE_PUBLIC_KEY: "pk_test_51S15MTQgUwRw17J6q42q0mTrIsWqVxYQA2uQ8MyHpcJBLyYzmCyIRMbgpFsgzeOQEu1pt05BH7kINl6tY13AXIZI00MwjijbdQ"
