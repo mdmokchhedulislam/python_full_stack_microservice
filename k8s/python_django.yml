@@ -1,41 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s
+  name: k8s_assainment-deployment
   namespace: production
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
-      app: k8s
+      app: k8s_assainment
   template:
     metadata:
       labels:
-        app: k8s
+        app: k8s_assainment
     spec:
       containers:
-      - name: k8s
+      - name: k8s_assainment
         image: mokchhedul/assainmentk8s:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
-        envFrom:
-        - configMapRef:
-            name: k8s-config   
-        - secretRef:
-            name: k8s-secrets  
+        env:
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: k8s_assainment-secret
+              key: SECRET_KEY
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-app
+  name: k8s_assainment-service
   namespace: production
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
-    app: k8s
+    app: k8s_assainment
   ports:
-  - port: 8000
-    targetPort: 8000
-    nodePort: 31000
+    - port: 80
+      targetPort: 8000
