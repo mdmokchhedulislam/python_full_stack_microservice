@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s_assainment-deployment
+  name: k8s-assainment-deployment
   namespace: production
 spec:
   replicas: 2
@@ -12,14 +12,14 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app: k8s_assainment
+      app: k8s-assainment
   template:
     metadata:
       labels:
-        app: k8s_assainment
+        app: k8s-assainment
     spec:
       containers:
-      - name: k8s_assainment
+      - name: k8s-assainment
         image: mokchhedul/assainmentk8s:latest
         imagePullPolicy: Always
         ports:
@@ -28,7 +28,7 @@ spec:
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: k8s_assainment-secret
+              name: k8s-assainment
               key: SECRET_KEY
         resources:
           requests:
@@ -37,17 +37,16 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: k8s_assainment-service
+  name: k8s-assainment-service
   namespace: production
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: k8s_assainment
+    app: k8s-assainment
   ports:
-    - port: 80
-      targetPort: 8000
+  - port: 80
+    targetPort: 8000
