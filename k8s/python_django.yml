@@ -28,7 +28,7 @@ spec:
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: k8s-assainment
+              name: k8s-assainment-secret
               key: SECRET_KEY
         resources:
           requests:
