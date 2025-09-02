@@ -20,22 +20,15 @@ spec:
         - containerPort: 8000
         envFrom:
         - configMapRef:
-            name: k8s-config   
+            name: k8s-config
         - secretRef:
-            name: k8s-secrets  
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: django-app
-  namespace: production
-spec:
-  type: NodePort
-  selector:
-    app: k8s
-  ports:
-  - port: 8000
-    targetPort: 8000
-    nodePort: 31000
+            name: k8s-secrets
+        command: ["sh", "-c", "python manage.py migrate && gunicorn rapid.wsgi:application --bind 0.0.0.0:8000"]
+        volumeMounts:
+          - name: db-storage
+            mountPath: /app/db.sqlite3
+            subPath: db.sqlite3
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: db-pvc
