@@ -21,13 +21,14 @@ spec:
         - containerPort: 8000
         envFrom:
           - secretRef:
-              name: my-app-secret
+              name: k8s-app-secret
           - configMapRef:
-              name: my-app-config
+              name: k8s-app-config
         volumeMounts:
         - name: sqlite-storage
           mountPath: /app/db.sqlite3
           subPath: db.sqlite3
+
         resources:
           requests:
             memory: "256Mi"
