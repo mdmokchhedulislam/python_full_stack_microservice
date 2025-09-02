@@ -1,33 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s
+  name: k8s-migrate
   namespace: production
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s
+      app: k8s-migrate
   template:
     metadata:
       labels:
-        app: k8s
+        app: k8s-migrate
     spec:
       containers:
-      - name: k8s
+      - name: migrate
         image: mokchhedul/assainmentk8s:latest
-        ports:
-        - containerPort: 8000
-        envFrom:
-        - configMapRef:
-            name: k8s-config   
-        - secretRef:
-            name: k8s-secrets  
         command: ["sh", "-c"]
         args:
-          - >
-            python manage.py migrate &&
-            gunicorn rapid.wsgi:application --bind 0.0.0.0:8000
+          - python manage.py migrate
+        envFrom:
+        - configMapRef:
+            name: k8s-config
+        - secretRef:
+            name: k8s-secrets
+
 ---
 apiVersion: v1
 kind: Service
