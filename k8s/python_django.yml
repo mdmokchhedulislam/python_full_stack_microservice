@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-migrate
+  name: k8s
   namespace: production
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-migrate
+      app: k8s
   template:
     metadata:
       labels:
-        app: k8s-migrate
+        app: k8s
     spec:
       containers:
-      - name: migrate
+      - name: k8s
         image: mokchhedul/assainmentk8s:latest
-        command: ["sh", "-c"]
-        args:
-          - python manage.py migrate
+        ports:
+        - containerPort: 8000
         envFrom:
         - configMapRef:
-            name: k8s-config
+            name: k8s-config   
         - secretRef:
-            name: k8s-secrets
+            name: k8s-secrets  
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
