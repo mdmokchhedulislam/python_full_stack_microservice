@@ -4,7 +4,7 @@ metadata:
   name: k8s-assainment-deployment
   namespace: production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: k8s-assainment
@@ -24,11 +24,6 @@ spec:
               name: k8s-app-secret
           - configMapRef:
               name: k8s-app-config
-        volumeMounts:
-        - name: sqlite-storage
-          mountPath: /app/db.sqlite3
-          subPath: db.sqlite3
-
         resources:
           requests:
             memory: "256Mi"
@@ -36,12 +31,7 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-      volumes:
-      - name: sqlite-storage
-        persistentVolumeClaim:
-          claimName: sqlite-pvc
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
